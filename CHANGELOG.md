@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.5.0](https://github.com/jeremybarbet/gatsby-source-prismic-graphql/compare/v3.4.0...v3.5.0) (2020-02-16)
+
+### Bug Fixes
+
+- change travis build to deploy stable version ([46854b8](https://github.com/jeremybarbet/gatsby-source-prismic-graphql/commit/46854b8))
+
+### Features
+
+- additional query size optimization ([8fcec72](https://github.com/jeremybarbet/gatsby-source-prismic-graphql/commit/8fcec72))
+- optimize query size ([57e2940](https://github.com/jeremybarbet/gatsby-source-prismic-graphql/commit/57e2940))
+
 # [3.4.0](https://github.com/birkir/gatsby-source-prismic-graphql/compare/v3.4.0-beta.2...v3.4.0) (2020-01-27)
 
 ### Features

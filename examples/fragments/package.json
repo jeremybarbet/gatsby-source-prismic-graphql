@@ -1,7 +1,7 @@
 {
   "name": "@examples/fragments",
   "private": true,
-  "version": "3.4.1-alpha.0",
+  "version": "3.5.0",
   "description": "A simple starter to get up and developing quickly with Gatsby",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
