@@ -16,7 +16,7 @@ export default class PreviewPage extends React.Component<any> {
   }
 
   get config() {
-    return this.props.prismic.options;
+    return (window as any).prismicGatsbyOptions;
   }
 
   public async preview() {
