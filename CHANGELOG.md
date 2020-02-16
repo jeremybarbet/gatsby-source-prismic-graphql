@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.2](https://github.com/jeremybarbet/gatsby-source-prismic-graphql/compare/v3.5.1...v3.5.2) (2020-02-16)
+
+### Bug Fixes
+
+- getter options ([905248f](https://github.com/jeremybarbet/gatsby-source-prismic-graphql/commit/905248ff378ed8ca26dc620159115b36017d79ce))
+
 ## [3.5.1](https://github.com/jeremybarbet/gatsby-source-prismic-graphql/compare/v3.5.0...v3.5.1) (2020-02-16)
 
 **Note:** Version bump only for package root
