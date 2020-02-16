@@ -34,7 +34,9 @@ export default class PreviewPage extends React.Component<any> {
 
     if (token) {
       await api.previewSession(token, linkResolver, '/');
-      document.cookie = `${Prismic.previewCookie}=${token}; expires=${now.toUTCString()}; path=/`;
+      document.cookie = `${
+        Prismic.previewCookie
+      }=${token}; expires=${now.toUTCString()}; path=/; SameSite=None; Secure`;
 
       if (!documentId) {
         return this.redirect();
@@ -60,7 +62,7 @@ export default class PreviewPage extends React.Component<any> {
         if (matchedVariation) {
           document.cookie = `${Prismic.experimentCookie}=${
             matchedVariation.ref
-          }; expires=${now.toUTCString()}; path=/`;
+          }; expires=${now.toUTCString()}; path=/; SameSite=None; Secure`;
           this.redirect();
         }
       }
