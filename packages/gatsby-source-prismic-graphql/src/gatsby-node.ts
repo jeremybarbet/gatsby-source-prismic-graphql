@@ -9,16 +9,6 @@ import querystring from 'querystring';
 
 exports.onCreateWebpackConfig = onCreateWebpackConfig;
 
-let accessToken: any;
-
-exports.onPreInit = (_: any, options: PluginOptions) => {
-  accessToken = options.accessToken;
-
-  if (!options.previews) {
-    delete options.accessToken;
-  }
-};
-
 exports.onCreatePage = ({ page, actions }: any) => {
   const rootQuery = getRootQuery(page.componentPath);
   page.context = page.context || {};
@@ -36,7 +26,7 @@ exports.sourceNodes = (ref: any, options: PluginOptions) => {
       PrismicLink({
         uri: `https://${options.repositoryName}.prismic.io/graphql`,
         credentials: 'same-origin',
-        accessToken,
+        accessToken: options.accessToken as any,
         customRef: options.prismicRef as any,
       }),
     ...options,
@@ -235,16 +225,14 @@ exports.createPages = async ({ graphql, actions: { createPage } }: any, options:
   const pageCreators: Promise<any>[] = [];
 
   // Create pageCreator promises for each page/language combination
-  pages.forEach(
-    (page: Page): void => {
-      const langs = page.langs || options.langs || (options.defaultLang && [options.defaultLang]);
-      if (langs) {
-        langs.forEach((lang: string) => pageCreators.push(createPagesForType(page, lang)));
-      } else {
-        pageCreators.push(createPagesForType(page));
-      }
+  pages.forEach((page: Page): void => {
+    const langs = page.langs || options.langs || (options.defaultLang && [options.defaultLang]);
+    if (langs) {
+      langs.forEach((lang: string) => pageCreators.push(createPagesForType(page, lang)));
+    } else {
+      pageCreators.push(createPagesForType(page));
     }
-  );
+  });
 
   // Run all pageCreators simultaneously
   await Promise.all(pageCreators);
