@@ -6,6 +6,7 @@ import { Page, PluginOptions } from './interfaces/PluginOptions';
 import { createRemoteFileNode } from 'gatsby-source-filesystem';
 import { pathToRegexp, compile } from 'path-to-regexp';
 import querystring from 'querystring';
+import { Endpoints, EditButton } from './utils/prismic';
 
 exports.onCreateWebpackConfig = onCreateWebpackConfig;
 
@@ -14,6 +15,7 @@ exports.onCreatePage = ({ page, actions }: any) => {
   page.context = page.context || {};
   if (rootQuery) {
     page.context.rootQuery = rootQuery;
+    page.context.headers = { [EditButton.HEADER_NAME]: page.path };
     actions.createPage(page);
   }
 };
@@ -24,7 +26,7 @@ exports.sourceNodes = (ref: any, options: PluginOptions) => {
     typeName,
     createLink: () =>
       PrismicLink({
-        uri: `https://${options.repositoryName}.prismic.io/graphql`,
+        uri: Endpoints.graphql(options.repositoryName),
         credentials: 'same-origin',
         accessToken: options.accessToken as any,
         customRef: options.prismicRef as any,
@@ -111,12 +113,14 @@ function createDocumentPages(
   edges.forEach(({ cursor, node }: any, index: number) => {
     const previousNode = edges[index - 1] && edges[index - 1].node;
     const nextNode = edges[index + 1] && edges[index + 1].node;
+    const path = createDocumentPath(page, node, options);
 
     // ...and create the page
     createPage({
-      path: createDocumentPath(page, node, options),
+      path,
       component: page.component,
       context: {
+        headers: { [EditButton.HEADER_NAME]: path },
         rootQuery: getRootQuery(page.component),
         ...node._meta,
         cursor,

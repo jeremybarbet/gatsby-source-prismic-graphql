@@ -3,6 +3,7 @@ import Prismic from 'prismic-javascript';
 import { linkResolver, getCookies } from '../utils';
 import { parseQueryString } from '../utils/parseQueryString';
 import { pathToRegexp } from 'path-to-regexp';
+import { Endpoints, PreviewCookie } from '../utils/prismic';
 
 interface Variation {
   id: string;
@@ -30,7 +31,7 @@ export default class PreviewPage extends React.Component<any> {
     const now = new Date();
     now.setHours(now.getHours() + 1);
 
-    const api = await Prismic.getApi(`https://${this.config.repositoryName}.cdn.prismic.io/api/v2`);
+    const api = await Prismic.getApi(Endpoints.v2(this.config.repositoryName));
 
     if (token) {
       await api.previewSession(token, linkResolver, '/');
@@ -69,7 +70,9 @@ export default class PreviewPage extends React.Component<any> {
     } else if (documentId) {
       const cookies = getCookies();
       const doc = await api.getByID(documentId);
-      const preview = cookies.has(Prismic.previewCookie) || cookies.has(Prismic.experimentCookie);
+      const preview =
+        Boolean(PreviewCookie.ref(this.config.repositoryName)) ||
+        cookies.has(Prismic.experimentCookie);
       this.redirect(preview && doc);
     }
   }
@@ -81,30 +84,38 @@ export default class PreviewPage extends React.Component<any> {
     }
 
     const link = linkResolver(doc);
-
-    const urlWithQueryString = (this.config.pages || [])
-      .map((page: any) => {
-        const keys: any = [];
-        const re = pathToRegexp(page.match, keys);
-        const match = re.exec(link);
-        const delimiter = (str: string) => (str.indexOf('?') === -1 ? '?' : '&');
-        if (match) {
-          return match
-            .slice(1)
-            .reduce(
-              (acc, value, i) =>
-                acc + (keys[i] ? `${delimiter(acc)}${keys[i].name}=${value}` : value),
-              page.path
-            );
-        }
-        return null;
-      })
-      .find((n: any) => !!n);
-
     const exists = (await fetch(link).then(res => res.status)) === 200;
 
-    if (!exists && urlWithQueryString) {
-      window.location = urlWithQueryString;
+    if (!exists) {
+      const urlWithQueryString = (this.config.pages || [])
+        .map((page: any) => {
+          const keys: any = [];
+
+          if (!page.match) {
+            return page.path;
+          }
+
+          const re = pathToRegexp(page.match, keys);
+          const match = re.exec(link);
+          const delimiter = (str: string) => (str.indexOf('?') === -1 ? '?' : '&');
+          if (match) {
+            return match
+              .slice(1)
+              .reduce(
+                (acc, value, i) =>
+                  acc + (keys[i] ? `${delimiter(acc)}${keys[i].name}=${value}` : value),
+                page.path
+              );
+          }
+          return null;
+        })
+        .find((n: any) => !!n);
+
+      if (urlWithQueryString) {
+        window.location = urlWithQueryString;
+      } else {
+        window.location = link as any;
+      }
     } else {
       window.location = link as any;
     }
