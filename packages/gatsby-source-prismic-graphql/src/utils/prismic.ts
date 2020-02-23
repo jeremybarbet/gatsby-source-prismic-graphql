@@ -18,7 +18,9 @@ export const Endpoints = {
         domain === 'wroom.io';
 
       return { isSecuredScheme, subdomain, domain: domain || this.DEFAULT_DOMAIN };
-    } else throw `Invalid Prismic repository name provided: ${repositoryName}`;
+    } else {
+      throw `Invalid Prismic repository name provided: ${repositoryName}`;
+    }
   },
 
   domain(repositoryName: string): string {
@@ -26,7 +28,7 @@ export const Endpoints = {
     return `${subdomain}.${domain}`;
   },
 
-  root(repositoryName: string, withCDN: boolean = true): string {
+  root(repositoryName: string, withCDN: boolean = false): string {
     const { isSecuredScheme, subdomain, domain } = this._parse(repositoryName);
     const scheme = isSecuredScheme ? 'https' : 'http';
     const cdn = isSecuredScheme && withCDN ? '.cdn' : '';

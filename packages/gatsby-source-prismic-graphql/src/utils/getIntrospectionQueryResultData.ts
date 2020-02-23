@@ -1,12 +1,19 @@
 import { Endpoints } from './prismic';
 
-export const getIntrospectionQueryResultData = ({ repositoryName }: any) =>
+export const getIntrospectionQueryResultData = ({ repositoryName, accessToken }: any) =>
   new Promise((resolve, reject) => {
-    fetch(Endpoints.v2(repositoryName))
-      .then(r => r.json())
+    // fetch(`https://${repositoryName}.prismic.io/api`, {
+    //   headers: new Headers({ Authorization: `Token ${accessToken}` }),
+    // })
+    fetch(`https://${repositoryName}.prismic.io/api`)
+      .then(result => result.json())
       .then((data: any) => {
-        const ref = data.refs.find((r: any) => r.id === 'master');
-        if (!ref) return;
+        const ref = (data.refs || []).find((r: any) => r.id === 'master');
+
+        if (!ref) {
+          return;
+        }
+
         fetch(
           `${Endpoints.graphql(
             repositoryName

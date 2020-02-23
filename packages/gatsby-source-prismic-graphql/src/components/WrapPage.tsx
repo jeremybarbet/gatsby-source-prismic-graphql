@@ -20,20 +20,19 @@ const queryOrSource = (obj: any) => {
   return null;
 };
 
-const stripSharp = (query: any) => {
-  return traverse(query).map(function(x) {
+const stripSharp = (query: any) =>
+  traverse(query).map(function(x) {
     if (
       typeof x === 'object' &&
-      x.kind == 'Name' &&
+      x.kind === 'Name' &&
       this.parent &&
       this.parent.node.kind === 'Field' &&
-      x.value.match(/Sharp$/) &&
-      !x.value.match(/.+childImageSharp$/)
+      x.value.match(/Sharp/) &&
+      !x.value.match(/childImageSharp$/)
     ) {
-      this.parent.remove();
+      this.parent.delete();
     }
   });
-};
 
 interface WrapPageState {
   data: any;
@@ -102,7 +101,9 @@ export class WrapPage extends React.PureComponent<any, WrapPageState> {
 
     if (pageContext.rootQuery && options.previews !== false && hasCookie) {
       const closeLoading = createLoadingScreen();
+
       this.setState({ loading: true });
+
       this.load()
         .then(res => {
           this.setState({
@@ -110,6 +111,7 @@ export class WrapPage extends React.PureComponent<any, WrapPageState> {
             error: null,
             data: { ...this.state.data, prismic: res.data },
           });
+
           closeLoading();
         })
         .catch(error => {
@@ -133,15 +135,16 @@ export class WrapPage extends React.PureComponent<any, WrapPageState> {
 
     const keys = [...(this.props.options.passContextKeys || []), ...this.keys];
     variables = { ...pick(this.params, keys), ...variables };
+    const strip = stripSharp(getIsolatedQuery(query, fieldName, typeName));
 
-    return getApolloClient(this.props.options).then(client => {
-      return client.query({
-        query: stripSharp(getIsolatedQuery(query, fieldName, typeName)),
+    return getApolloClient(this.props.options).then(client =>
+      client.query({
+        query: strip,
         fetchPolicy: 'network-only',
         variables,
         ...rest,
-      });
-    });
+      })
+    );
   };
 
   render() {

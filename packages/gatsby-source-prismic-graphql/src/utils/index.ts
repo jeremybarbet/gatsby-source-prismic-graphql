@@ -115,6 +115,7 @@ export function PrismicLink({
         const mainContext = operation.getContext().graphqlContext || {};
         const pageContext = mainContext.context || {};
         const pageHeaders = pageContext.headers;
+
         return {
           headers: {
             ...headers,

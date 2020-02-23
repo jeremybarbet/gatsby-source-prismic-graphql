@@ -7,15 +7,11 @@ interface OnRenderBodyArgs {
 }
 
 exports.onRenderBody = ({ setHeadComponents }: OnRenderBodyArgs, options: PluginOptions) => {
-  const accessToken = options.previews ? null : options.accessToken;
-
   const components = [
     <script
       key="prismic-config"
       dangerouslySetInnerHTML={{
-        __html: `
-            window.prismicGatsbyOptions = ${JSON.stringify({ ...options, accessToken })};
-          `,
+        __html: `window.prismicGatsbyOptions = ${JSON.stringify(options)};`,
       }}
     />,
   ];
