@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.3](https://github.com/birkir/gatsby-source-prismic-graphql/compare/v3.5.2...v3.5.3) (2020-02-24)
+
+### Bug Fixes
+
+- reduce lodash bundle size ([f05e4cc](https://github.com/birkir/gatsby-source-prismic-graphql/commit/f05e4cc))
+- remove null from query ([3ca4bb0](https://github.com/birkir/gatsby-source-prismic-graphql/commit/3ca4bb0))
+- stripSharp with preview ([58e424a](https://github.com/birkir/gatsby-source-prismic-graphql/commit/58e424a))
+- types ([36f7cb0](https://github.com/birkir/gatsby-source-prismic-graphql/commit/36f7cb0))
+
+### Features
+
+- add prismic toolbar v3 ([1739cc5](https://github.com/birkir/gatsby-source-prismic-graphql/commit/1739cc5))
+
 ## [3.5.2](https://github.com/birkir/gatsby-source-prismic-graphql/compare/v3.5.1...v3.5.2) (2020-02-16)
 
 ### Bug Fixes
