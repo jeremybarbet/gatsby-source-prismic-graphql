@@ -39,12 +39,11 @@ exports.sourceNodes = (ref: any, options: PluginOptions) => {
 
 function createGeneralPreviewPage(createPage: Function, options: PluginOptions): void {
   const previewPath: string = options.previewPath || '/preview';
+
   createPage({
     path: previewPath.replace(/^\//, ''),
     component: path.resolve(path.join(__dirname, 'components', 'PreviewPage.js')),
-    context: {
-      prismicPreviewPage: true,
-    },
+    context: { prismicPreviewPage: true },
   });
 }
 
