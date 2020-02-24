@@ -20,8 +20,8 @@ const queryOrSource = (obj: any) => {
   return null;
 };
 
-const stripSharp = (query: any) =>
-  traverse(query).map(function(x) {
+const stripSharp = (query: any) => {
+  const traversed = traverse(query).map(function(x) {
     if (
       typeof x === 'object' &&
       x.kind === 'Name' &&
@@ -33,6 +33,14 @@ const stripSharp = (query: any) =>
       this.parent.delete();
     }
   });
+
+  // Def not the best solution but couldn't find another way to remove the null values
+  const clean = JSON.stringify(traversed)
+    .replace(/,null,/gm, ',')
+    .replace(/,null/gm, '');
+
+  return JSON.parse(clean);
+};
 
 interface WrapPageState {
   data: any;
