@@ -10,9 +10,21 @@ import { Endpoints, EditButton } from './utils/prismic';
 
 exports.onCreateWebpackConfig = onCreateWebpackConfig;
 
+let accessToken: string | null | undefined;
+
+exports.onPreInit = (_: any, options: PluginOptions) => {
+  accessToken = options.accessToken;
+
+  if (!options.previews) {
+    delete options.accessToken;
+  }
+};
+
 exports.onCreatePage = ({ page, actions }: any) => {
   const rootQuery = getRootQuery(page.componentPath);
+
   page.context = page.context || {};
+
   if (rootQuery) {
     page.context.rootQuery = rootQuery;
     page.context.headers = { [EditButton.HEADER_NAME]: page.path };
@@ -28,7 +40,7 @@ exports.sourceNodes = (ref: any, options: PluginOptions) => {
       PrismicLink({
         uri: Endpoints.graphql(options.repositoryName),
         credentials: 'same-origin',
-        accessToken: options.accessToken as any,
+        accessToken: accessToken as any,
         customRef: options.prismicRef as any,
       }),
     ...options,
@@ -49,6 +61,7 @@ function createGeneralPreviewPage(createPage: Function, options: PluginOptions):
 
 function createDocumentPreviewPage(createPage: Function, page: Page, lang?: string): void {
   const rootQuery = getRootQuery(page.component);
+
   createPage({
     path: page.path,
     matchPath: process.env.NODE_ENV === 'production' ? undefined : page.match,
@@ -247,7 +260,6 @@ exports.createResolvers = (
   { sharpKeys = [/image|photo|picture/] }: PluginOptions
 ) => {
   const { createNode } = actions;
-
   const state = store.getState();
   const [prismicSchema = {}] = state.schemaCustomization.thirdPartySchemas;
   const typeMap = prismicSchema._typeMap;
@@ -257,8 +269,10 @@ exports.createResolvers = (
     const typeEntry = typeMap[typeName];
     const typeFields = (typeEntry && typeEntry.getFields && typeEntry.getFields()) || {};
     const typeResolver: { [key: string]: any } = {};
+
     for (const fieldName in typeFields) {
       const field = typeFields[fieldName];
+
       if (
         field.type === typeMap.PRISMIC_Json &&
         sharpKeys.some((re: RegExp | string) =>
@@ -273,6 +287,7 @@ exports.createResolvers = (
           resolve(source: any, args: any) {
             const obj = (source && source[fieldName]) || {};
             const url = args.crop ? obj[args.crop] && obj[args.crop].url : obj.url;
+
             if (url) {
               return createRemoteFileNode({
                 url: querystring.unescape(url),
