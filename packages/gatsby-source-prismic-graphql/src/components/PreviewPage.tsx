@@ -31,7 +31,9 @@ export default class PreviewPage extends React.Component<any> {
     const now = new Date();
     now.setHours(now.getHours() + 1);
 
-    const api = await Prismic.getApi(Endpoints.v2(this.config.repositoryName));
+    const api = await Prismic.getApi(Endpoints.v2(this.config.repositoryName), {
+      accessToken: this.config.accessToken,
+    });
 
     if (token) {
       await api.previewSession(token, linkResolver, '/');
@@ -64,6 +66,7 @@ export default class PreviewPage extends React.Component<any> {
           document.cookie = `${Prismic.experimentCookie}=${
             matchedVariation.ref
           }; expires=${now.toUTCString()}; path=/; SameSite=None; Secure`;
+
           this.redirect();
         }
       }
@@ -73,6 +76,7 @@ export default class PreviewPage extends React.Component<any> {
       const preview =
         Boolean(PreviewCookie.ref(this.config.repositoryName)) ||
         cookies.has(Prismic.experimentCookie);
+
       this.redirect(preview && doc);
     }
   }
