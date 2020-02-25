@@ -40,6 +40,7 @@ export function getCursorFromDocumentIndex(index: number) {
 export function fetchStripQueryWhitespace(url: string, ...args: any) {
   const [hostname, qs = ''] = url.split('?');
   const queryString = parseQueryString(qs);
+
   if (queryString.has('query')) {
     queryString.set(
       'query',

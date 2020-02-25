@@ -1,6 +1,5 @@
 import React from 'react';
 import { PluginOptions } from './interfaces/PluginOptions';
-import { Endpoints } from './utils/prismic';
 
 interface OnRenderBodyArgs {
   setHeadComponents(args: React.ReactElement<any>[]): void;
@@ -21,9 +20,7 @@ exports.onRenderBody = ({ setHeadComponents }: OnRenderBodyArgs, options: Plugin
       <script
         key="prismic-script"
         type="text/javascript"
-        src={`//static.cdn.prismic.io/prismic.min.js?new=true&repo=${Endpoints.domain(
-          options.repositoryName
-        )}`}
+        src={`//static.cdn.prismic.io/prismic.min.js?new=true&repo=${options.repositoryName}`}
       />
     );
   }

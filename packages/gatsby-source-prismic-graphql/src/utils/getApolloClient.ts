@@ -23,6 +23,7 @@ export const getApolloClient = async ({
       link: PrismicLink({
         uri: Endpoints.graphql(repositoryName),
         credentials: 'same-origin',
+        accessToken: accessToken as any,
       }),
     });
   }

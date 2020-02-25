@@ -8,6 +8,7 @@ export const Endpoints = {
 
   _parse(repositoryName: string): { isSecuredScheme: boolean; subdomain: string; domain: string } {
     const result = repositoryName.match(this.regexp);
+
     if (result) {
       const subdomain = result[3];
       const domain = result[5];
@@ -28,7 +29,7 @@ export const Endpoints = {
     return `${subdomain}.${domain}`;
   },
 
-  root(repositoryName: string, withCDN: boolean = false): string {
+  root(repositoryName: string, withCDN: boolean = true): string {
     const { isSecuredScheme, subdomain, domain } = this._parse(repositoryName);
     const scheme = isSecuredScheme ? 'https' : 'http';
     const cdn = isSecuredScheme && withCDN ? '.cdn' : '';
