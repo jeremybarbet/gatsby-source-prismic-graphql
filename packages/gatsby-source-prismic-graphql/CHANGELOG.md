@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.6.0](https://github.com/birkir/gatsby-source-prismic-graphql/compare/v3.5.3...v3.6.0) (2020-02-25)
+
+### Features
+
+- handle private api with preview ([8055aa4](https://github.com/birkir/gatsby-source-prismic-graphql/commit/8055aa4))
+- sanitize access token ([14edaf4](https://github.com/birkir/gatsby-source-prismic-graphql/commit/14edaf4))
+
 ## [3.5.3](https://github.com/birkir/gatsby-source-prismic-graphql/compare/v3.5.2...v3.5.3) (2020-02-24)
 
 ### Bug Fixes
