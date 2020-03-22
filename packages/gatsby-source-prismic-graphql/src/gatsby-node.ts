@@ -256,7 +256,7 @@ exports.createPages = async ({ graphql, actions: { createPage } }: any, options:
 };
 
 exports.createResolvers = (
-  { actions, cache, createNodeId, createResolvers, store, reporter }: any,
+  { actions, cache, getCache, createNodeId, createResolvers, store, reporter }: any,
   { sharpKeys = [/image|photo|picture/] }: PluginOptions
 ) => {
   const { createNode } = actions;
@@ -293,10 +293,11 @@ exports.createResolvers = (
                 url: querystring.unescape(url),
                 store,
                 cache,
+                getCache,
                 createNode,
                 createNodeId,
                 reporter,
-              });
+              } as any);
             }
             return null;
           },
