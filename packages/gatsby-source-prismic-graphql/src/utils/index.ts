@@ -134,7 +134,7 @@ export function PrismicLink({
       fetch: fetchStripQueryWhitespace,
     });
 
-    return ApolloLink.from([prismicLink, editButtonLink, httpLink]);
+    return ApolloLink.from([prismicLink as any, editButtonLink, httpLink]);
   } else {
     throw new Error(`${uri} isn't a valid Prismic GraphQL endpoint`);
   }
